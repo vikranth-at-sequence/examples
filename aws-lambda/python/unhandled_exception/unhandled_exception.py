@@ -1,21 +1,11 @@
-# /**
-# *******************************************************************************
-# * File name   : unhandled_exception.py
-# * Description : This file contains code that instruments unhandled exception
-# *******************************************************************************
-# **/
-
-# Import Sentry library
 import sentry_sdk
 from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 
-# Configure Sentry SDK
 sentry_sdk.init(
     dsn="<your DSN>",
     integrations=[AwsLambdaIntegration()],
     traces_sample_rate=1.0
 )
-
 
 def lambda_handler(event, context):
     """Lambda function which does a division by zero operation
@@ -27,7 +17,14 @@ def lambda_handler(event, context):
     Returns:
         json: A simple json object with two keys and corresponding values
     """
-    division_by_zero = 4/0
+    try:
+        division_by_zero = 4/0
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        return {
+            'status_code': 500,
+            'body': 'An error occurred'
+        }
     return {
         'status_code': 200,
         'body': division_by_zero
