@@ -17,6 +17,5 @@ custom:
 
 functions:
   hello:
-    handler: unhandled_exception.handler
+    handler: handled_exception.handler
     layers: ${self:custom.layers}
-
