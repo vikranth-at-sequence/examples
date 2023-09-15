@@ -1,26 +1,15 @@
-/**
- *******************************************************************************
- * File name   : handled_exception.js
- * Description : This file contains code that instruments handled exception.
- *
- *******************************************************************************
- **/
+const Sentry = require('@sentry/node');
 
-// Import the Sentry module.
-const Sentry = require("@sentry/node");
-// Configure the Sentry SDK.
-Sentry.init({
-  dsn: "<your DSN>",
-});
+exports.handler = async function (event, context, callback) {
+  Sentry.init({
+    dsn: "<your DSN>",
+  });
 
-// below is the faulty code, undefinedFun() function is not exist.
-
-exports.handler = function (event, context, callback) {
   try {
     undefinedFunCall(); // call undefined function.
   } catch (e) {
     Sentry.captureException(e); // Capture the exception in the Sentry dashboard.
-    Sentry.flush(2000);
+    await Sentry.flush(2000);
   }
 
   const response = {
