@@ -18,5 +18,7 @@ custom:
 functions:
   hello:
     handler: unhandled_exception.handler
-    layers: ${self:custom.layers}
 
+  sentry-example-api:
+    handler: src/pages/api/sentry-example-api.handler
+    layers: ${self:custom.layers}
